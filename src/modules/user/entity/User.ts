@@ -13,6 +13,7 @@ import { Length, IsNotEmpty } from "class-validator";
 import * as bcrypt from "bcryptjs";
 
 import { Order } from "../../../modules/order/entity/Order";
+import { Journal } from "../../../modules/journal/entity/Journal";
 @Entity()
 @Unique(["username"])
 export class User {
@@ -45,6 +46,9 @@ export class User {
 
     @OneToMany(type => Order, order => order.user)
     orders: Order[];
+
+    @OneToMany(type => Order, journal => journal.user)
+    journals: Journal[];
 
     checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
         return bcrypt.compareSync(unencryptedPassword, this.password);

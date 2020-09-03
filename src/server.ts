@@ -6,13 +6,14 @@ import "reflect-metadata";
 import * as helmet from "helmet";
 import * as cors from "cors";
 
+
 import userRoutes from './modules/user/userRoutes';
 import { orderRouter } from './modules/order/orderRoutes';
 import { productRouter } from './modules/product/productRoutes';
 
 
 import routes from "./routes/index";
-
+import config from "./config/config";
 
 createConnection().then(async connection => {
 
@@ -25,6 +26,10 @@ createConnection().then(async connection => {
     app.use(helmet());
     app.use(bodyParser.json());
     app.use(bodyParser.json());
+    //setting middleware
+    //__dirname gives the folder root of the current file
+    app.use(express.static(__dirname + '/../public')); //Serves resources from public folder
+
 
     app.use("/", routes);
     // app.use('/user', userRoutes);
@@ -32,9 +37,9 @@ createConnection().then(async connection => {
     // app.use('/product', productRouter);
     // start express server
 
-    app.listen(3000, (err) => {
+    app.listen(config.PORT, (err) => {
         if (err) console.error('❌ Unable to connect the server: ', err);
-        console.log(`🌍 Server listening on port 3000`);
+        console.log(`🌍 Server listening on port ` + config.PORT);
     });
     //http://localhost:3000/user
     //http://localhost:3000/user/27/orders
