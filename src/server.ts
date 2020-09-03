@@ -6,7 +6,7 @@ import "reflect-metadata";
 import * as helmet from "helmet";
 import * as cors from "cors";
 
-import { userRouter } from './modules/user/userRoutes';
+import userRoutes from './modules/user/userRoutes';
 import { orderRouter } from './modules/order/orderRoutes';
 import { productRouter } from './modules/product/productRoutes';
 
@@ -27,7 +27,7 @@ createConnection().then(async connection => {
     app.use(bodyParser.json());
 
     app.use("/", routes);
-    // app.use('/user', userRouter);
+    // app.use('/user', userRoutes);
     // app.use('/order', orderRouter);
     // app.use('/product', productRouter);
     // start express server

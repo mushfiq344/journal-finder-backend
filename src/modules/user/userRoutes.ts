@@ -1,36 +1,34 @@
-import * as express from "express";
-import { NextFunction, Request, Response } from "express";
-import { UserController } from "./controller/userController";
+import { Router } from "express";
+import UserController from "./controller/userController";
 import { checkJwt } from "../../middlewares/checkJwt";
-var userRouter = express.Router();
+import { checkRole } from "../../middlewares/checkRole";
 
-// route middleware that will happen on every request
-userRouter.use((req: Request, res: Response, next: NextFunction) => {
+const userRoutes = Router();
+//Get all users
+userRoutes.get("/", [checkJwt, checkRole(["ADMIN"])], UserController.listAll);
 
-    // log each request to the console
-    console.log("common user router middleware new", req.method, req.url);
+// Get one user
+userRoutes.get(
+    "/:id([0-9]+)",
+    [checkJwt, checkRole(["ADMIN"])],
+    UserController.getOneById
+);
 
-    // continue doing what we were doing and go to the route
-    next();
-});
+//Create a new user
+userRoutes.post("/", UserController.newUser);
 
-userRouter.get('/', [checkJwt], async (req: Request, res: Response) => {
-    const users = await UserController.users();
-    res.send({ message: "this is journal finder hi" });
-});
+//Edit one user
+userRoutes.patch(
+    "/:id([0-9]+)",
+    [checkJwt, checkRole(["ADMIN"])],
+    UserController.editUser
+);
 
-userRouter.get('/:id', async (req: Request, res: Response) => {
-    const user = await UserController.user(req.params.id);
-    res.send(user);
+//Delete one user
+userRoutes.delete(
+    "/:id([0-9]+)",
+    [checkJwt, checkRole(["ADMIN"])],
+    UserController.deleteUser
+);
 
-});
-
-userRouter.get('/:id/orders', async (req: Request, res: Response) => {
-    const user = await UserController.userOrder(req.params.id);
-    res.send(user);
-
-});
-
-
-
-export { userRouter };
+export default userRoutes;
