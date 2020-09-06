@@ -7,8 +7,8 @@ import * as helmet from "helmet";
 import * as cors from "cors";
 
 
-import userRoutes from './modules/user/userRoutes';
-import { orderRouter } from './modules/order/orderRoutes';
+
+import { orderRouter } from './routes/orderRoutes';
 import { productRouter } from './modules/product/productRoutes';
 
 
@@ -22,6 +22,26 @@ createConnection().then(async connection => {
     // create express app
     const app = express();
     // Call midlewares
+
+    // Add headers
+    app.use(function (req, res, next) {
+
+        // Website you wish to allow to connect
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        // Request methods you wish to allow
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+        // Request headers you wish to allow
+        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+        // Set to true if you need the website to include cookies in the requests sent
+        // to the API (e.g. in case you use sessions)
+        res.setHeader('Access-Control-Allow-Credentials', true);
+
+        // Pass to next layer of middleware
+        next();
+    });
     app.use(cors());
     app.use(helmet());
     app.use(bodyParser.json());

@@ -4,7 +4,7 @@ import * as jwt from "jsonwebtoken";
 import { getRepository } from "typeorm";
 import { validate } from "class-validator";
 
-import { User } from "../modules/user/entity/User";
+import { User } from "../entity/User";
 import config from "../config/config";
 
 class AuthController {
@@ -38,7 +38,34 @@ class AuthController {
         );
 
         //Send the jwt in the response
-        res.send(token);
+        res.status(200).send({ token: token });
+    };
+
+    static userFromJwt = async (req: Request, res: Response) => {
+
+        //Get the jwt token from the head
+        const token = <string>req.headers["authorization"] ?
+            <string>req.headers["authorization"].replace("Bearer ", "") :
+            res.status(401).send();
+        let jwtPayload;
+
+        //Try to validate the token and get data
+        try {
+            jwtPayload = <any>jwt.verify(token, config.jwtSecret);
+
+            res.locals.jwtPayload = jwtPayload;
+        } catch (error) {
+            //If token is not valid, respond with 401 (unauthorized)
+            res.status(401).send();
+
+            return;
+        }
+
+        //The token is valid for 1 hour
+        //We want to send a new token on every request
+        const { userId, username, createdUsername } = jwtPayload;
+
+        res.status(200).send({ user: { userId: userId, username: jwtPayload.createdUsername ? jwtPayload.createdUsername : jwtPayload.username } })
     };
 
     static changePassword = async (req: Request, res: Response) => {

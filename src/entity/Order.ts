@@ -1,17 +1,19 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { User } from "../../user/entity/User";
+import { User } from "./User";
 @Entity()
-export class Journal {
+export class Order {
 
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    title: string;
+    address: string;
+
+
 
     @Column()
-    link: string;
+    age: number;
 
-    @ManyToOne(type => User, user => user.journals)
+    @ManyToOne(type => User, user => user.orders)
     user: User;
 }

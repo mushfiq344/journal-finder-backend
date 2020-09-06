@@ -1,6 +1,6 @@
 import * as express from "express";
 
-import { OrderController } from "./controller/orderController";
+import { OrderController } from "../controllers/orderController";
 
 var orderRouter = express.Router();
 

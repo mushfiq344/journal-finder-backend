@@ -4,7 +4,7 @@ import { validate } from "class-validator";
 import * as jwt from "jsonwebtoken";
 
 import { User } from "../entity/User";
-import config from "../../../config/config";
+import config from "../config/config";
 class UserController {
 
     static listAll = async (req: Request, res: Response) => {

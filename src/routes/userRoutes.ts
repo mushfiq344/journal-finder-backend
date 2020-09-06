@@ -1,7 +1,7 @@
 import { Router } from "express";
-import UserController from "./controller/userController";
-import { checkJwt } from "../../middlewares/checkJwt";
-import { checkRole } from "../../middlewares/checkRole";
+import UserController from "../controllers/userController";
+import { checkJwt } from "../middlewares/checkJwt";
+import { checkRole } from "../middlewares/checkRole";
 
 const userRoutes = Router();
 //Get all users
